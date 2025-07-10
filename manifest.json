@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Explorer",
+  "version": "1.4",
+  "description": "New tab page showing tabs as a file explorer",
+  "permissions": [
+    "tabs",
+    "search",
+    "storage"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  }
+}

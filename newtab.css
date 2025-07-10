@@ -1,0 +1,345 @@
+body {
+  font-family: "Press Start 2P", cursive;
+  background: #000;
+  color: #0f0;
+  margin: 0;
+  padding: 1em;
+}
+
+body.theme-green {
+  background-color: #000;
+  color: #0f0;
+}
+
+body.theme-amber {
+  background-color: #000;
+  color: #ffbf00;
+}
+
+body.theme-blue {
+  background-color: #000;
+  color: #00bfff;
+}
+
+
+button,
+input {
+  background: #111;
+  color: currentColor;
+  border: 2px solid currentColor;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+button:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+h1 {
+  font-size: 16px;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+h2 {
+  font-size: 13px;
+  margin-bottom: 1em;
+  margin-top: 4em;
+  text-align: center;
+}
+
+details {
+  background: #111;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  margin-bottom: 0.5em;
+  margin-left: 0.5em;
+  padding: 0.5em;
+}
+
+details:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+#clock {
+  font-size: 82px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+#button-grid {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 3px;
+}
+
+.highlight {
+  background: none;
+  color: red;
+  font-weight: bold;
+  border-bottom: 3px dotted currentColor;
+}
+
+#search {
+  width: 98.3%;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 0.5em;
+  margin-bottom: 2em;
+  background: #111;
+  border: 3px solid currentColor;
+  color: currentColor;
+  text-align: center;
+}
+
+summary {
+  cursor: pointer;
+  font-size: 14px;
+  margin: -2em;
+  padding: 2em;
+}
+
+#tabs {
+  display: flex;
+  flex-direction: column;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.25em 0.5em;
+  margin: auto;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tab {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0.25em 0.5em;
+  margin-left: 1em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tab:hover {
+  background: black;
+}
+
+.favicon {
+  width: 13px;
+  height: 13px;
+  margin-right: 0.5em;
+  image-rendering: pixelated;
+}
+
+#themeSelect {
+  appearance: none;
+  background: #000;
+  border: 2px solid currentColor;
+  color: inherit;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  padding: 4px 8px;
+  cursor: pointer;
+  width: 160px;
+  position: relative;
+}
+
+#themeSelect:focus {
+  outline: none;
+  border-color: #fff;
+}
+
+#themeSelect option {
+  background: #000;
+  color: inherit;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+#scanlines {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.05) 2px,
+      rgba(0, 0, 0, 0.05) 4px);
+  animation: scroll 1s linear infinite;
+  z-index: 9998;
+}
+
+#quickAccess {
+  margin-top: 1em;
+  font-family: monospace;
+  margin-bottom: 2em;
+}
+
+#quickAccess h3 {
+  color: currentColor;
+  margin: 0.5em 0;
+  font-size: 1em;
+  text-align: center;
+  align-items: center;
+  gap: 0.5em;
+  font-family: 'Press Start 2P', monospace;
+
+}
+
+#quickAccess h3 button {
+  padding: 0.2em 0.4em;
+  font-size: 0.8em;
+  background: #111;
+  border: 1px solid currentColor;
+  color: currentColor;
+  cursor: pointer;
+}
+
+#quickAccess h3 button:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+.shortcut {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.25em;
+  padding: 0.3em 0.6em;
+  background: #111;
+  border: 1px solid currentColor;
+  color: currentColor;
+  cursor: pointer;
+  font-size: 1.1em;
+  border-radius: 0.2em;
+  position: relative;
+  user-select: none;
+}
+
+.shortcut:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+.shortcut .deleteBtn {
+  display: none;
+  margin-left: 0.5em;
+  background: transparent;
+  border: none;
+  color: #f00;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.shortcut.edit-mode .deleteBtn {
+  display: inline;
+}
+
+.shortcut input.edit-label,
+.shortcut input.edit-url {
+  background: #222;
+  border: 1px solid currentColor;
+  color: currentColor;
+  font-size: 0.9em;
+  padding: 0.2em;
+  margin-right: 0.3em;
+}
+
+#shortcutPanel {
+  display: flex;
+  flex-direction: column;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 3px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.shortcut-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3em 0.6em;
+  font-size: 0.9em;
+  background: #111;
+  border: 1px solid currentColor;
+  color: currentColor;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.shortcut-btn:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+.shortcut-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.shortcut img {
+  image-rendering: pixelated;
+  margin-right: 0.5em;
+  width: 16px;
+  height: 16px;
+}
+
+#shortcutInputs {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#shortcutInputs input {
+  padding: 0.3em;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9em;
+  border: 1px solid currentColor;
+  background: #000;
+  color: currentColor;
+}
+
+#shortcutInputs button {
+  padding: 0.3em 0.6em;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9em;
+  border: 1px solid currentColor;
+  background: #111;
+  color: currentColor;
+  cursor: pointer;
+}
+
+#shortcutInputs button:hover {
+  background: #222;
+  border-color: #ff0;
+}
+
+@keyframes scroll {
+  0% {
+    background-position-y: 0;
+  }
+
+  100% {
+    background-position-y: 4px;
+  }
+}
+
+@media (max-width: 800px) {
+  #tabs {
+    flex-direction: column;
+  }
+}
