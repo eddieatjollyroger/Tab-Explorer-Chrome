@@ -1,3 +1,8 @@
+* {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
 body {
   font-family: "Press Start 2P", cursive;
   background: #000;
@@ -88,7 +93,7 @@ details:hover {
 }
 
 #search {
-  width: 98.3%;
+  width: 100%;
   font-family: inherit;
   font-size: 12px;
   padding: 0.5em;
@@ -226,6 +231,10 @@ summary {
   position: relative;
   user-select: none;
 }
+.shortcut a{
+  text-decoration: none;
+  color: inherit;
+}
 
 .shortcut:hover {
   background: #222;
@@ -337,7 +346,39 @@ summary {
     background-position-y: 4px;
   }
 }
+/* Base scrollbar size */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
 
+/* Track background */
+::-webkit-scrollbar-track {
+  background-color: #000;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent; 
+}
+/* Thumb styling */
+::-webkit-scrollbar-thumb {
+  background-color: #00ff00;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #00ff00 0px,
+    #00ff00 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  border: 1px solid #00ff00;
+  border-radius: 0; /* NO rounding = square */
+  animation: pulse-glow 2s infinite;
+}
+
+/* On hover: more glow */
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 10px #00ff00;
+}
 @media (max-width: 800px) {
   #tabs {
     flex-direction: column;
