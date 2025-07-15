@@ -19,6 +19,9 @@ function groupTabsByDomain(tabs) {
   const groups = {};
   for (const tab of tabs) {
     try {
+      if(!tab.url){
+        tab.url = fixPendingURL(tab.pendingUrl,groups);
+      }
       const url = new URL(tab.url);
       const domain = url.hostname;
       if (!groups[domain]) {
@@ -26,7 +29,7 @@ function groupTabsByDomain(tabs) {
       }
       groups[domain].push(tab);
     } catch (e) {
-      console.warn("Invalid URL:", tab.url);
+      console.warn("Invalid URL:", tab);
     }
   }
   return groups;
@@ -51,7 +54,7 @@ function createTabElement(tab) {
 
   const icon = document.createElement('img');
   icon.className = 'favicon';
-  icon.src = tab.favIconUrl || 'https://www.mozilla.org/media/protocol/img/logos/firefox/browser/logo-md.3f5f8412e4b0.png';
+  icon.src = getFavIcon(tab);
   icon.alt = '';
 
   const title = document.createElement('span');
@@ -67,6 +70,7 @@ function createTabElement(tab) {
   pinBtn.style.color = 'inherit';
   pinBtn.style.font = 'inherit';
   pinBtn.style.cursor = 'pointer';
+
   pinBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     chrome.tabs.update(tab.id, { pinned: !tab.pinned });
@@ -83,6 +87,7 @@ function createTabElement(tab) {
   closeBtn.style.color = '#f00';
   closeBtn.style.font = 'inherit';
   closeBtn.style.cursor = 'pointer';
+
   closeBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     chrome.tabs.remove(tab.id);
@@ -96,12 +101,28 @@ function createTabElement(tab) {
   return el;
 }
 
+chrome.tabs.onCreated.addListener(function(tab) {
+  refreshTabs();
+}); 
+
+chrome.tabs.onRemoved.addListener(function(tabId) {
+  allTabs = allTabs.filter(tab => tab.id !== tabId);
+  const grouped = groupTabsByDomain(allTabs);
+  var filteredGroup = {};
+    for (var key in grouped) {
+       var arr = grouped[key];
+      filteredGroup[key] = (arr.filter(t => t.id !== tabId));
+    }
+    refreshTabs(filteredGroup);
+    }); 
+
 function renderTabs(groups, open) { //open is the parameter that decides if the parent folders details will be open or closed on render
-  const container = document.getElementById('tabs');
+ const container = document.getElementById('tabs');
   container.innerHTML = '';
 
   for (const domain in groups) {
     const details = document.createElement('details');
+    details.className = domain;
     details.open = open;
 
     const summary = document.createElement('summary');
@@ -109,7 +130,7 @@ function renderTabs(groups, open) { //open is the parameter that decides if the 
 
     const icon = document.createElement('img');
     icon.className = 'favicon';
-    icon.src = groups[domain][0].favIconUrl || 'https://www.mozilla.org/media/protocol/img/logos/firefox/browser/logo-md.3f5f8412e4b0.png';
+    icon.src = groups[domain][0].favIconUrl || '/favicongif.gif';
     icon.alt = '';
     summary.prepend(icon);
 
@@ -129,11 +150,49 @@ function renderTabs(groups, open) { //open is the parameter that decides if the 
   }
 }
 
-function refreshTabs() {
+function reRenderTabs(groups) { //open is the parameter that decides if the parent folders details will be open or closed on render
+  const detailsEls = document.querySelectorAll('#tabs > details');
+  const container = document.getElementById('tabs');
+  container.innerHTML = '';
+  for (const domain in groups) {
+
+    const details = document.createElement('details');
+    const detail = Array.from(detailsEls).find(node => node.className == domain);
+    details.className = domain;
+
+    details.open = detail ? detail.open : "";
+
+    const summary = document.createElement('summary');
+    summary.textContent = `${domain} (${groups[domain].length} tab${groups[domain].length !== 1 ? 's' : ''})`;
+
+    const icon = document.createElement('img');
+    icon.className = 'favicon';
+    icon.src = getFavIcon(groups[domain][0]);
+    icon.alt = '';
+    summary.prepend(icon);
+
+    details.appendChild(summary);
+
+    const tabList = document.createElement('div');
+    tabList.className = 'tab-list';
+
+    for (const tab of groups[domain]) {
+      const tabEl = createTabElement(tab);
+      tabList.appendChild(tabEl);
+    }
+
+    details.appendChild(tabList);
+    container.appendChild(details);
+
+  }
+}
+
+function refreshTabs(tabs) {
+  if(tabs) return reRenderTabs(tabs);
   chrome.tabs.query({}).then((tabs) => {
     allTabs = tabs;
     const grouped = groupTabsByDomain(tabs);
-    renderTabs(grouped, true); // Renders tabs without closing the details
+    reRenderTabs(grouped); // Renders tabs without closing the details
   });
 }
 
@@ -567,10 +626,36 @@ function prependHttps(url) {
     url : new URL("https://" + url).href;
 }
 
-function cleanURL(url) {
+function cleanURL(urlIn) {
+  const url = new URL(urlIn);
   if (url.search) {
     return url.hostname + url.pathname + url.search;
   }
   return url.pathname.length > 1 ?
     url.hostname + url.pathname : url.hostname;
+}
+function fixPendingURL(url,groups){
+        const formattedUrl = new URL(url);
+
+        if(formattedUrl.hostname.split('.').length < 3){
+        const urlWWW = "www."+ formattedUrl.hostname;
+        
+        if(!groups[urlWWW]){
+            return formattedUrl;
+        }
+        return new URL("https://"+urlWWW);
+        }
+
+        return formattedUrl;
+}
+function getFavIcon(tab)
+{
+  if(tab.favIconUrl){
+  return tab.favIconUrl;
+  }
+  const url = new URL(tab.url);
+  if(url?.protocol.startsWith('http')){
+    return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}`;
+  }
+  return '/favicongif.gif';
 }
