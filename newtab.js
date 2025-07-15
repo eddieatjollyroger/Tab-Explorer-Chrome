@@ -14,22 +14,6 @@ themeSelect.addEventListener('change', () => {
   chrome.storage.local.set({ theme });
 });
 
-//Escape HTML
-function escapeHTML(str) {
-  return str.replace(/[&<>"'`=\/]/g, (s) => {
-    return ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;',
-      '`': '&#x60;',
-      '=': '&#x3D;',
-      '/': '&#x2F;',
-    })[s];
-  });
-}
-
 
 function groupTabsByDomain(tabs) {
   const groups = {};
@@ -203,7 +187,7 @@ function loadQuickShortcuts() {
       const labelSpan = document.createElement('span');
       labelSpan.textContent = s.label;
       link.appendChild(labelSpan);
-      
+
       btn.appendChild(link);
 
       // Delete button
@@ -220,7 +204,7 @@ function loadQuickShortcuts() {
       // Prevent opening on click when in edit mode
       btn.addEventListener('click', (e) => {
         if (btn.classList.contains('edit-mode')) {
-        e.preventDefault();
+          e.preventDefault();
         }
       });
 
@@ -237,7 +221,13 @@ function loadQuickShortcuts() {
 
         const urlInput = document.createElement('input');
         urlInput.className = 'edit-url';
-        urlInput.value = s.url;
+        const urlStored = new URL(s.url);
+        urlInput.value = cleanURL(urlStored);
+
+        //Scrolls input to the end of line on mouse click               
+        urlInput.addEventListener('click', () => {
+          urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
+        });
 
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
@@ -245,7 +235,7 @@ function loadQuickShortcuts() {
           e.preventDefault();
           e.stopPropagation();
           s.label = labelInput.value.trim();
-          s.url = urlInput.value.trim();
+          s.url = prependHttps(urlInput.value.trim());
           chrome.storage.local.set({ quickShortcuts: shortcuts }).then(loadQuickShortcuts);
         });
 
@@ -293,10 +283,9 @@ function loadQuickShortcuts() {
 document.getElementById('addQuickShortcut').addEventListener('click', () => {
   const label = document.getElementById('shortcutLabel').value.trim();
   const urlTrim = document.getElementById('shortcutUrl').value.trim();
-  const url = urlTrim.startsWith("http") || urlTrim.startsWith("https") ?
-              urlTrim : new URL("https://"+urlTrim).href;
-  
-          if (!label || !url) {
+  const url = prependHttps(urlTrim);
+
+  if (!label || !url) {
     alert('Please enter both label and URL.');
     return;
   }
@@ -555,4 +544,33 @@ function cycleTheme() {
   themeSelect.value = next;
   document.body.className = 'theme-' + next;
   chrome.storage.local.set({ theme: next });
+}
+
+
+//Escape HTML
+function escapeHTML(str) {
+  return str.replace(/[&<>"'`=\/]/g, (s) => {
+    return ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '`': '&#x60;',
+      '=': '&#x3D;',
+      '/': '&#x2F;',
+    })[s];
+  });
+}
+function prependHttps(url) {
+  return url.startsWith("http://") || url.startsWith("https://") ?
+    url : new URL("https://" + url).href;
+}
+
+function cleanURL(url) {
+  if (url.search) {
+    return url.hostname + url.pathname + url.search;
+  }
+  return url.pathname.length > 1 ?
+    url.hostname + url.pathname : url.hostname;
 }
