@@ -101,8 +101,8 @@ function createTabElement(tab) {
   return el;
 }
 
-chrome.tabs.onCreated.addListener(function(tab) {
-  refreshTabs();
+chrome.tabs.onUpdated.addListener(function(tabID,changeinfo,tab) {
+if(changeinfo.status == 'complete') refreshTabs();
 }); 
 
 chrome.tabs.onRemoved.addListener(function(tabId) {
@@ -652,5 +652,5 @@ function getFavIcon(tab)
   return '/favicongif.gif';
 }
 function fetchFavicon(url){ //more reliable for redirects
-  return `https://icons.duckduckgo.com/ip3/${encodeURIComponent(new URL(url).hostname)}.ico`;
+  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}`;
 }
