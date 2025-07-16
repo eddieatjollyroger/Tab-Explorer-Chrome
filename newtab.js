@@ -20,7 +20,7 @@ function groupTabsByDomain(tabs) {
   for (const tab of tabs) {
     try {
       if(!tab.url){
-        tab.url = fixPendingURL(tab.pendingUrl,groups);
+        tab.url = fixPendingURL(tab.pendingUrl);
       }
       const url = new URL(tab.url);
       const domain = url.hostname.startsWith('www.') ?
@@ -285,8 +285,10 @@ function loadQuickShortcuts() {
 
         //Scrolls input to the end of line on mouse click               
         urlInput.addEventListener('click', () => {
+          urlInput.focus();
+          urlInput.scrollLeft = urlInput.scrollWidth;
           urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
-        });
+                });
 
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
@@ -634,18 +636,8 @@ function cleanURL(urlIn) {
   return url.pathname.length > 1 ?
     url.hostname + url.pathname : url.hostname;
 }
-function fixPendingURL(url,groups){
+function fixPendingURL(url){
         const formattedUrl = new URL(url);
-
-        if(formattedUrl.hostname.split('.').length < 3){
-        const urlWWW = "www."+ formattedUrl.hostname;
-        
-        if(!groups[urlWWW]){
-            return formattedUrl;
-        }
-        return new URL("https://"+urlWWW);
-        }
-
         return formattedUrl;
 }
 function getFavIcon(tab)
@@ -658,4 +650,7 @@ function getFavIcon(tab)
     return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}`;
   }
   return '/favicongif.gif';
+}
+function fetchFavicon(url){ //more reliable for redirects
+  return `https://icons.duckduckgo.com/ip3/${encodeURIComponent(new URL(url).hostname)}.ico`;
 }
