@@ -75,6 +75,8 @@ details:hover {
   margin-top: 1em;
   margin-bottom: 1em;
   text-align: center;
+  transform: translateZ(0);  /* FIX demonic 1 pixel bug on macOS chromium */
+  will-change: transform;    /* FIX demonic 1 pixel bug on macOS chromium */
 }
 
 #button-grid {
