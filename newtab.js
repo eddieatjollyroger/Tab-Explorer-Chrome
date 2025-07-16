@@ -23,8 +23,8 @@ function groupTabsByDomain(tabs) {
         tab.url = fixPendingURL(tab.pendingUrl,groups);
       }
       const url = new URL(tab.url);
-      const domain = url.hostname;
-      if (!groups[domain]) {
+      const domain = url.hostname.startsWith('www.') ?
+                     url.hostname.split('www.')[1] : url.hostname;      if (!groups[domain]) {
         groups[domain] = [];
       }
       groups[domain].push(tab);
