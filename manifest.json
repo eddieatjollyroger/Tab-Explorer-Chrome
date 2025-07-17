@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Explorer",
-  "version": "2.11",
+  "version": "2.12",
   "description": "New tab page showing tabs as a file explorer",
   "permissions": [
     "tabs",
