@@ -78,6 +78,8 @@ details:hover {
 }
 
 #clock {
+  display: flex;
+  justify-content: center;
   font-size: 82px;
   margin-top: 1em;
   margin-bottom: 1em;
@@ -102,7 +104,8 @@ details:hover {
 }
 
 #search-input {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   width: 100%;
   font-family: inherit;
   font-size: 1em;
@@ -111,9 +114,11 @@ details:hover {
   background: #111;
   border: 3px solid currentColor;
   color: currentColor;
-  text-align: center;
   text-decoration: #0f0;
   caret-color: transparent;
+}
+#search-input br{
+  display:none;
 }
 #search-input.placeholder {
 color: #666;
@@ -146,7 +151,7 @@ summary {
   display: flex;
   flex-direction: column;
   flex-flow: row wrap;
-  align-items: flex-start;
+
   justify-content: center;
   padding: 0.25em 0.5em;
   margin: auto;
@@ -436,5 +441,7 @@ h3#footer{
   #tabs {
     flex-direction: column;
   }
-  
+  #search-input br{
+  display:none;
+}
 }
