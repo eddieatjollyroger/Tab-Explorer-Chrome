@@ -684,6 +684,7 @@ function startPlaceholderTyping() {
 function stopPlaceholderTyping() {
   if (!isTyping) return;
   clearInterval(placeholderInterval);
+  placeholderInterval = undefined; //actually clear Interval
   input.textContent = "";
   input.classList.remove("placeholder");
   placeholderIndex = 0;
