@@ -70,6 +70,7 @@ details {
   margin-bottom: 0.5em;
   margin-left: 0.5em;
   padding: 0.5em;
+  word-break: break-word;
 }
 
 details:hover {
@@ -104,8 +105,9 @@ details:hover {
 }
 
 #search-input {
-  display: flex;
+  display: inline-block;
   justify-content: center;
+  text-align: center;
   width: 100%;
   font-family: inherit;
   font-size: 1em;
@@ -141,6 +143,7 @@ border: 3px solid var(--theme-color);;
   }
 }
 summary {
+  display: flex;
   cursor: pointer;
   font-size: 14px;
   margin: -0.5em;
@@ -290,10 +293,12 @@ summary {
   border-radius: 0.2em;
   position: relative;
   user-select: none;
+  word-break: break-word;
 }
 .shortcut a{
   text-decoration: none;
   color: inherit;
+  display: flex;
 }
 
 .shortcut:hover {
