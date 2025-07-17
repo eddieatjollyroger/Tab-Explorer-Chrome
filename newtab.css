@@ -150,6 +150,15 @@ summary {
   padding: 0.5em;
 }
 
+summary .favicon{
+  image-rendering: pixelated;
+  margin-right: 0.5em;
+  width: 16px;
+  height: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 #tabs {
   display: flex;
   flex-direction: column;
@@ -369,6 +378,8 @@ summary {
   margin-right: 0.5em;
   width: 16px;
   height: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 #shortcutInputs {
