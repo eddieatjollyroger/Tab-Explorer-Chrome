@@ -3,27 +3,34 @@
        -moz-box-sizing: border-box;
             box-sizing: border-box;
 }
+:root {
+  --theme-color: #0f0;
+}
 body {
-  font-family: "Press Start 2P", cursive;
+  font-family: "Press Start 2P", monospace;
   background: #000;
   color: #0f0;
   margin: 0;
   padding: 1em;
+  --main-bg-color: #0f0;
 }
 
 body.theme-green {
   background-color: #000;
   color: #0f0;
+  --theme-color: #0f0
 }
 
 body.theme-amber {
   background-color: #000;
   color: #ffbf00;
+  --theme-color: #ffbf00;
 }
 
 body.theme-blue {
   background-color: #000;
   color: #00bfff;
+  --theme-color: #00bfff;
 }
 
 
@@ -94,18 +101,40 @@ details:hover {
   border-bottom: 3px dotted currentColor;
 }
 
-#search {
+#search-input {
+  display: inline-block;
   width: 100%;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 1em;
   padding: 0.5em;
   margin-bottom: 2em;
   background: #111;
   border: 3px solid currentColor;
   color: currentColor;
   text-align: center;
+  text-decoration: #0f0;
+  caret-color: transparent;
+}
+#search-input.placeholder {
+color: #666;
+border: 3px solid var(--theme-color);;
 }
 
+#search-input::after {
+  content: '█';
+  animation: blink 1s steps(2, start) infinite;
+  position: relative;
+  top: -3px;
+}
+.blink {
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
 summary {
   cursor: pointer;
   font-size: 14px;
@@ -123,6 +152,7 @@ summary {
   margin: auto;
   cursor: pointer;
   user-select: none;
+  font-size: 1.3rem;
 }
 
 .tab {
@@ -189,6 +219,7 @@ summary {
 }
 
 #quickAccess {
+  display: inline; /* FIX missalignment on chrome */
   margin-top: 1em;
   font-family: monospace;
   margin-bottom: 2em;
@@ -197,12 +228,12 @@ summary {
 #quickAccess h3 {
   color: currentColor;
   margin: 0.5em 0;
-  font-size: 1em;
+  font-size: 1.3em;
+ /* font-weight: lighter;  FIX BLURRINESS ON CHROME but i kinda like it ahah*/
   text-align: center;
   align-items: center;
   gap: 0.5em;
   font-family: 'Press Start 2P', monospace;
-
 }
 
 #quickAccess h3 button {
@@ -228,7 +259,7 @@ summary {
   border: 1px solid currentColor;
   color: currentColor;
   cursor: pointer;
-  font-size: 1.1em;
+  font-size: 1.3em;
   border-radius: 0.2em;
   position: relative;
   user-select: none;
@@ -338,6 +369,26 @@ summary {
   background: #222;
   border-color: #ff0;
 }
+#collapseAll{
+  font-size:12px;
+  padding:0.25em 0.5em;
+  margin-left:0.5em;
+  margin-bottom:1em;
+  background:#111;
+  cursor:pointer;
+}
+#expandAll{
+  font-size:12px;
+  padding:0.25em 0.5em;
+  margin-left:0.5em;
+  margin-bottom:1em;
+  background:#111;
+  cursor:pointer;
+}
+h3#footer{
+  margin: 2EM;
+   text-align: center;
+}
 
 @keyframes scroll {
   0% {
@@ -381,8 +432,9 @@ summary {
 ::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 0 10px #00ff00;
 }
-@media (max-width: 800px) {
+@media (max-width: 600px) {
   #tabs {
     flex-direction: column;
   }
+  
 }

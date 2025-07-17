@@ -14,19 +14,25 @@ themeSelect.addEventListener('change', () => {
   chrome.storage.local.set({ theme });
 });
 
+const input = document.getElementById("search-input");
+let placeholderText = "PRESS / TO SEARCH YOUR TABS AND THE WEB";
+let placeholderIndex = 0;
+let placeholderInterval;
+let isTyping = false;
+
 
 function groupTabsByDomain(tabs) {
   const groups = {};
   for (const tab of tabs) {
     try {
-      if(!tab.url){
+      if (!tab.url) {
         tab.url = fixPendingURL(tab.pendingUrl);
       }
       const url = new URL(tab.url);
       const domain = url.hostname.startsWith('www.') ?
-                     url.hostname.split('www.')[1] : url.hostname;      if (!groups[domain]) {
-        groups[domain] = [];
-      }
+        url.hostname.split('www.')[1] : url.hostname; if (!groups[domain]) {
+          groups[domain] = [];
+        }
       groups[domain].push(tab);
     } catch (e) {
       console.warn("Invalid URL:", tab);
@@ -101,23 +107,26 @@ function createTabElement(tab) {
   return el;
 }
 
-chrome.tabs.onUpdated.addListener(function(tabID,changeinfo,tab) {
-if(changeinfo.status == 'complete') refreshTabs();
-}); 
+chrome.tabs.onUpdated.addListener(function (tabID, changeinfo, tab) {
+  console.log(changeinfo)
+  console.log(tab)
+  if (tab.url == 'chrome://newtab/' && selected) return; // Dont update needlessly on own load
+  if (changeinfo.status == 'complete') refreshTabs();
+});
 
-chrome.tabs.onRemoved.addListener(function(tabId) {
+chrome.tabs.onRemoved.addListener(function (tabId) {
   allTabs = allTabs.filter(tab => tab.id !== tabId);
   const grouped = groupTabsByDomain(allTabs);
   var filteredGroup = {};
-    for (var key in grouped) {
-       var arr = grouped[key];
-      filteredGroup[key] = (arr.filter(t => t.id !== tabId));
-    }
-    refreshTabs(filteredGroup);
-    }); 
+  for (var key in grouped) {
+    var arr = grouped[key];
+    filteredGroup[key] = (arr.filter(t => t.id !== tabId));
+  }
+  refreshTabs(filteredGroup);
+});
 
 function renderTabs(groups, open) { //open is the parameter that decides if the parent folders details will be open or closed on render
- const container = document.getElementById('tabs');
+  const container = document.getElementById('tabs');
   container.innerHTML = '';
 
   for (const domain in groups) {
@@ -130,7 +139,7 @@ function renderTabs(groups, open) { //open is the parameter that decides if the 
 
     const icon = document.createElement('img');
     icon.className = 'favicon';
-    icon.src = groups[domain][0].favIconUrl || '/favicongif.gif';
+    icon.src = getFavIcon(groups[domain][0]);
     icon.alt = '';
     summary.prepend(icon);
 
@@ -188,7 +197,8 @@ function reRenderTabs(groups) { //open is the parameter that decides if the pare
 }
 
 function refreshTabs(tabs) {
-  if(tabs) return reRenderTabs(tabs);
+  console.log('refreshed')
+  if (tabs) return reRenderTabs(tabs);
   chrome.tabs.query({}).then((tabs) => {
     allTabs = tabs;
     const grouped = groupTabsByDomain(tabs);
@@ -238,7 +248,15 @@ function loadQuickShortcuts() {
       link.href = s.url;
 
       const icon = document.createElement('img');
-      icon.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.url)}`;
+      icon.src = loadFavicon(s.url).then((img) => {
+        console.log(img.naturalHeight)
+        if (img.naturalHeight !== 16) {
+          icon.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.url)}`;
+        }
+        else {
+          icon.src = '/favicongif.gif'
+        }
+      });
       icon.alt = '';
       link.prepend(icon);
 
@@ -288,7 +306,7 @@ function loadQuickShortcuts() {
           urlInput.focus();
           urlInput.scrollLeft = urlInput.scrollWidth;
           urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
-                });
+        });
 
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
@@ -383,8 +401,8 @@ document.getElementById('editShortcutsBtn').addEventListener('click', () => {
 // Load on startup
 loadQuickShortcuts();
 // SEARCH
-document.getElementById('search').addEventListener('input', (e) => {
-  const query = e.target.value.trim().toLowerCase();
+document.getElementById('search-input').addEventListener('input', (e) => {
+  const query = e.target.textContent.trim().toLowerCase();
   const allGroups = document.querySelectorAll('#tabs > details');
 
   // HIDE QUICK SHORTCUTS ON SEARCH
@@ -564,7 +582,7 @@ function renderSavedGroups(savedGroups) {
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.id === 'search-input') return;
 
   if (e.key === '[') {
     document.querySelectorAll('#tabs > details').forEach(el => el.open = false);
@@ -574,7 +592,7 @@ document.addEventListener('keydown', (e) => {
 
   } else if (e.key === '/' && !e.ctrlKey && !e.metaKey) {
     e.preventDefault();
-    document.getElementById('search').focus();
+    document.getElementById('search-input').focus();
 
   } else if (e.key === 't' || e.key === 'T') {
     cycleTheme();
@@ -586,9 +604,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 //DEFAULT SEARCH ENGINE
-document.getElementById('search').addEventListener('keydown', (e) => {
+document.getElementById('search-input').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
-    const query = e.target.value.trim();
+    console.log(e);
+    const query = e.target.textContent.trim();
     if (query) {
       chrome.search.query({
         text: query
@@ -636,21 +655,82 @@ function cleanURL(urlIn) {
   return url.pathname.length > 1 ?
     url.hostname + url.pathname : url.hostname;
 }
-function fixPendingURL(url){
-        const formattedUrl = new URL(url);
-        return formattedUrl;
+function fixPendingURL(url) {
+  const formattedUrl = new URL(url);
+  return formattedUrl;
 }
-function getFavIcon(tab)
-{
-  if(tab.favIconUrl){
-  return tab.favIconUrl;
+function getFavIcon(tab) {
+  if (tab.favIconUrl) {
+    return tab.favIconUrl;
   }
   const url = new URL(tab.url);
-  if(url?.protocol.startsWith('http')){
+  if (url?.protocol.startsWith('http')) {
     return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}`;
   }
   return '/favicongif.gif';
 }
-function fetchFavicon(url){ //more reliable for redirects
-  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}`;
+
+function loadFavicon(url) {
+  return new Promise((resolve, reject) => {
+    const sizeQuery = '&sz=64';
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = (e) => reject(e);
+    img.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url)}${sizeQuery}`;
+  });
 }
+
+function placeCaretAtEnd(el) {
+  el.focus();
+  if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+
+function startPlaceholderTyping() {
+  if (input.textContent.trim() !== "" || document.activeElement === input) return;
+
+  isTyping = true;
+  input.classList.add("placeholder");
+
+  placeholderInterval = setInterval(() => {
+    if (placeholderIndex < placeholderText.length) {
+      input.textContent += placeholderText.charAt(placeholderIndex);
+      placeholderIndex++;
+    } else {
+      clearInterval(placeholderInterval);
+      setTimeout(() => {
+        input.textContent = "";
+        placeholderIndex = 0;
+        startPlaceholderTyping();
+      }, 7500);
+    }
+  }, 100);
+}
+
+function stopPlaceholderTyping() {
+  if (!isTyping) return;
+  clearInterval(placeholderInterval);
+  input.textContent = "";
+  input.classList.remove("placeholder");
+  placeholderIndex = 0;
+  isTyping = false;
+}
+
+// Start typing when not focused
+startPlaceholderTyping();
+
+input.addEventListener("focus", stopPlaceholderTyping);
+input.addEventListener("blur", () => {
+  if (input.textContent.trim() === "") startPlaceholderTyping();
+});
+input.addEventListener("input", () => {
+  if (input.textContent.trim() !== "") stopPlaceholderTyping();
+});
+
