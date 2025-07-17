@@ -151,7 +151,7 @@ summary {
   display: flex;
   flex-direction: column;
   flex-flow: row wrap;
-
+  align-items: flex-start;
   justify-content: center;
   padding: 0.25em 0.5em;
   margin: auto;
@@ -171,6 +171,28 @@ summary {
 }
 
 .tab:hover {
+  background: black;
+}
+.pin-btn {
+  margin-left: 0.5em;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.pin-btn:hover{
+  background:black;
+}
+.close-btn {
+  margin-left: 0.5em;
+  background : transparent;
+  border : none;
+  color : #f00;
+  font: inherit;
+  cursor : pointer;
+}
+.close-btn:hover{
   background: black;
 }
 
