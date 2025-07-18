@@ -154,6 +154,25 @@ summary {
   margin: -0.5em;
   padding: 0.5em;
 }
+summary::after {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-top: 10px solid var(--theme-color);
+  border-inline: 7px solid transparent;
+  transition: 0.2s;
+  margin-top: 1px;
+  margin-bottom: auto;
+  margin-left: 4px;
+}
+
+details[open] > summary::after {
+  transform: rotate(-180deg);
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
 
 summary .favicon{
   image-rendering: pixelated;
@@ -462,22 +481,22 @@ h3#footer{
 }
 /* Thumb styling */
 ::-webkit-scrollbar-thumb {
-  background-color: #00ff00;
+  background-color: var(--theme-color);
   background-image: repeating-linear-gradient(
     0deg,
-    #00ff00 0px,
-    #00ff00 2px,
+    var(--theme-color) 0px,
+    var(--theme-color) 2px,
     transparent 2px,
     transparent 4px
   );
-  border: 1px solid #00ff00;
+  border: 1px solid var(--theme-color);
   border-radius: 0; /* NO rounding = square */
   animation: pulse-glow 2s infinite;
 }
 
 /* On hover: more glow */
 ::-webkit-scrollbar-thumb:hover {
-  box-shadow: 0 0 10px #00ff00;
+  box-shadow: 0 0 10px var(--theme-color);
 }
 @media (max-width: 600px) {
   #tabs {
