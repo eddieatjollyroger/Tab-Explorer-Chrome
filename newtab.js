@@ -24,9 +24,16 @@ function cycleTheme() {
   chrome.storage.local.set({ theme: next });
 }
 
+const placeholders = [
+  "PRESS / TO SEARCH YOUR TABS",
+  "PRESS ENTER WHEN TYPING TO SEARCH THE WEB",
+  "DOUBLE CLICK A SHORTCUT WHILE IN EDIT MODE TO CHANGE IT",
+  "DRAG SHORTCUTS TO REORDER THEM",
+  "PRESS T TO SWITCH THE COLOR THEME"
+];
 
 const input = document.getElementById("search-input");
-let placeholder = "PRESS / TO SEARCH YOUR TABS AND THE WEB";
+let currentPlaceholder = "";
 let index = 0;
 let typingInterval;
 let isTyping = false;
@@ -232,11 +239,9 @@ function loadQuickShortcuts() {
       link.href = s.url;
 
       const icon = document.createElement('img');
-      icon.src = loadFavicon(s.url).then((img) => {
-        if (img.naturalHeight !== 16) {
-          icon.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.url)}`;
-        }
-        else {
+      icon.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(s.url)}`;
+      loadFavicon(s.url).then((img) => { 
+        if (img.naturalHeight == 16) {
           icon.src = '/favicongif.gif'
         }
       });
@@ -664,11 +669,21 @@ function loadFavicon(url) {
 }
 
 
+function getRandomPlaceholder() {
+  let next;
+  do {
+    next = placeholders[Math.floor(Math.random() * placeholders.length)];
+  } while (next === currentPlaceholder); // Avoid immediate repeat
+  return next;
+}
+
 function typePlaceholder() {
   if (isTyping || input.textContent.trim() !== "" || document.activeElement === input) return;
 
   isTyping = true;
   input.classList.add("placeholder");
+
+  const placeholder = getRandomPlaceholder();
 
   typingInterval = setInterval(() => {
     input.textContent += placeholder[index++];
