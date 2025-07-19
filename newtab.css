@@ -1,11 +1,13 @@
 * {
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
+
 :root {
   --theme-color: #0f0;
 }
+
 body {
   font-family: "Press Start 2P", monospace;
   background: #000;
@@ -63,7 +65,21 @@ h2 {
   text-align: center;
 }
 
+.shortcut input.edit-label,
+.shortcut input.edit-url {
+  background: #222;
+  border: 1px solid currentColor;
+  color: currentColor;
+  font-size: 0.9em;
+  padding: 0.2em;
+  margin-right: 0.3em;
+}
 
+.shortcut input.edit-label:focus,
+.shortcut input.edit-url:focus{
+    outline: none;
+
+}
 
 #clock {
   display: flex;
@@ -72,8 +88,10 @@ h2 {
   margin-top: 1em;
   margin-bottom: 1em;
   text-align: center;
-  transform: translateZ(0);  /* FIX demonic 1 pixel bug on macOS chromium */
-  will-change: transform;    /* FIX demonic 1 pixel bug on macOS chromium */
+  transform: translateZ(0);
+  /* FIX demonic 1 pixel bug on macOS chromium */
+  will-change: transform;
+  /* FIX demonic 1 pixel bug on macOS chromium */
 }
 
 #button-grid {
@@ -106,16 +124,19 @@ h2 {
   text-decoration: var(--theme-color);
   caret-color: transparent;
 }
-#search-input:focus{
-  outline:none;
+
+#search-input:focus {
+  outline: none;
   border-color: var(--theme-color);
   border-width: 3px;
 }
-#search-input br{
-  display:none;
+
+#search-input br {
+  display: none;
 }
+
 #search-input.placeholder {
-color: #666;
+  color: #666;
 }
 
 #search-input::after {
@@ -124,6 +145,7 @@ color: #666;
   position: relative;
   top: -3px;
 }
+
 .blink {
   animation: blink 1s steps(2, start) infinite;
 }
@@ -160,10 +182,11 @@ summary {
   padding: 0.5em;
   padding-right: 2em;
 }
- 
+
 summary::-webkit-details-marker {
   display: none;
 }
+
 .marker {
   position: absolute;
   top: 0.5em;
@@ -181,21 +204,27 @@ summary::-webkit-details-marker {
 
 /* Rotate and move when open */
 details[open] summary .marker {
-    border-top: none;
-  border-bottom: 10px solid var(--theme-color); /* triangle down */
+  border-top: none;
+  border-bottom: 10px solid var(--theme-color);
+  /* triangle down */
   top: auto;
 }
+
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.5;
     transform: scale(1.2);
   }
 }
-summary .favicon{
+
+summary .favicon {
   image-rendering: pixelated;
   margin-right: 0.5em;
   width: 16px;
@@ -230,6 +259,7 @@ summary .favicon{
 .tab:hover {
   background: black;
 }
+
 .pin-btn {
   margin-left: 0.5em;
   background: transparent;
@@ -238,18 +268,21 @@ summary .favicon{
   font: inherit;
   cursor: pointer;
 }
-.pin-btn:hover{
-  background:black;
+
+.pin-btn:hover {
+  background: black;
 }
+
 .close-btn {
   margin-left: 0.5em;
-  background : transparent;
-  border : none;
-  color : #f00;
+  background: transparent;
+  border: none;
+  color: #f00;
   font: inherit;
-  cursor : pointer;
+  cursor: pointer;
 }
-.close-btn:hover{
+
+.close-btn:hover {
   background: black;
 }
 
@@ -303,7 +336,8 @@ summary .favicon{
 }
 
 #quickAccess {
-  display: inline; /* FIX missalignment on chrome */
+  display: inline;
+  /* FIX missalignment on chrome */
   margin-top: 1em;
   font-family: monospace;
   margin-bottom: 2em;
@@ -313,7 +347,7 @@ summary .favicon{
   color: currentColor;
   margin: 0.5em 0;
   font-size: 1.3em;
- /* font-weight: lighter;  FIX BLURRINESS ON CHROME but i kinda like it ahah*/
+  /* font-weight: lighter;  FIX BLURRINESS ON CHROME but i kinda like it ahah*/
   text-align: center;
   align-items: center;
   gap: 0.5em;
@@ -349,7 +383,8 @@ summary .favicon{
   user-select: none;
   word-break: break-word;
 }
-.shortcut a{
+
+.shortcut a {
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -429,11 +464,12 @@ summary .favicon{
   padding: 0.3em;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.9em;
-  border: 1px solid #666;
+  border: 1px solid var(--theme-color);
   background: #000;
   color: currentColor;
 }
-#shortcutInputs input:focus{
+
+#shortcutInputs input:focus {
   padding: 0.3em;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.9em;
@@ -456,25 +492,28 @@ summary .favicon{
   background: #222;
   border-color: #ff0;
 }
-#collapseAll{
-  font-size:12px;
-  padding:0.25em 0.5em;
-  margin-left:0.5em;
-  margin-bottom:1em;
-  background:#111;
-  cursor:pointer;
+
+#collapseAll {
+  font-size: 12px;
+  padding: 0.25em 0.5em;
+  margin-left: 0.5em;
+  margin-bottom: 1em;
+  background: #111;
+  cursor: pointer;
 }
-#expandAll{
-  font-size:12px;
-  padding:0.25em 0.5em;
-  margin-left:0.5em;
-  margin-bottom:1em;
-  background:#111;
-  cursor:pointer;
+
+#expandAll {
+  font-size: 12px;
+  padding: 0.25em 0.5em;
+  margin-left: 0.5em;
+  margin-bottom: 1em;
+  background: #111;
+  cursor: pointer;
 }
-h3#footer{
+
+h3#footer {
   margin: 2EM;
-   text-align: center;
+  text-align: center;
 }
 
 @keyframes scroll {
@@ -486,6 +525,7 @@ h3#footer{
     background-position-y: 4px;
   }
 }
+
 /* Base scrollbar size */
 ::-webkit-scrollbar {
   width: 8px;
@@ -498,20 +538,20 @@ h3#footer{
 }
 
 ::-webkit-scrollbar-corner {
-    background-color: transparent; 
+  background-color: transparent;
 }
+
 /* Thumb styling */
 ::-webkit-scrollbar-thumb {
   background-color: var(--theme-color);
-  background-image: repeating-linear-gradient(
-    0deg,
-    var(--theme-color) 0px,
-    var(--theme-color) 2px,
-    transparent 2px,
-    transparent 4px
-  );
+  background-image: repeating-linear-gradient(0deg,
+      var(--theme-color) 0px,
+      var(--theme-color) 2px,
+      transparent 2px,
+      transparent 4px);
   border: 1px solid var(--theme-color);
-  border-radius: 0; /* NO rounding = square */
+  border-radius: 0;
+  /* NO rounding = square */
   animation: pulse-glow 2s infinite;
 }
 
@@ -519,12 +559,14 @@ h3#footer{
 ::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 0 10px var(--theme-color);
 }
+
 @media (max-width: 600px) {
   #tabs {
     display: inline;
     flex-direction: column;
   }
-  #search-input br{
-  display:none;
-}
+
+  #search-input br {
+    display: none;
+  }
 }

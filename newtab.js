@@ -277,6 +277,7 @@ function loadQuickShortcuts() {
         btn.innerHTML = '';
 
         btn.classList.add('inline-edit');
+        btn.draggable = false;
 
         const labelInput = document.createElement('input');
         labelInput.className = 'edit-label';
@@ -288,13 +289,8 @@ function loadQuickShortcuts() {
         urlInput.value = cleanURL(urlStored);
 
         //Scrolls input to the end of line on mouse click               
-        urlInput.addEventListener('click', (e) => {
-          if(e.detail == 1){ // If 1 click only select and scroll to end of text
-          urlInput.focus();
-          urlInput.scrollLeft = urlInput.scrollWidth;
-          urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
-          }
-        });
+        urlInput.addEventListener('click', (e) => handleTextInput(urlInput,e));
+        labelInput.addEventListener('click', (e) => handleTextInput(labelInput,e));
 
         const saveBtn = document.createElement('button');
         saveBtn.textContent = 'Save';
@@ -603,6 +599,14 @@ function renderSavedGroups(savedGroups) {
     details.appendChild(tabList);
     container.appendChild(details);
   }
+}
+
+function handleTextInput(textInput,event){         
+          if(event.detail == 1){ // If 1 click only select and scroll to end of text
+          textInput.focus();
+          textInput.scrollLeft = textInput.scrollWidth;
+          textInput.setSelectionRange(textInput.value.length, textInput.value.length);
+          }   
 }
 
 //Escape HTML
