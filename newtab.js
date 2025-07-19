@@ -125,6 +125,11 @@ function renderTabs(groups, isFirstRender) {
     icon.alt = '';
     summary.prepend(icon);
 
+    const marker = document.createElement('span');
+    marker.className = 'marker';
+    summary.append(marker);
+
+
     details.appendChild(summary);
 
     const tabList = document.createElement('div');
