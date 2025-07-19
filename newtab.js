@@ -269,10 +269,14 @@ function loadQuickShortcuts() {
 
       // Inline edit on double click (edit mode only)
       btn.addEventListener('dblclick', (e) => {
-        if (!btn.classList.contains('edit-mode')) return;
+        
+        if (!btn.classList.contains('edit-mode') || (btn.classList.contains('inline-edit'))) return;
+        if (Array.from(panel.childNodes).some(e=> e.classList.contains('inline-edit'))) return;
 
         e.stopPropagation();
         btn.innerHTML = '';
+
+        btn.classList.add('inline-edit');
 
         const labelInput = document.createElement('input');
         labelInput.className = 'edit-label';
@@ -284,10 +288,12 @@ function loadQuickShortcuts() {
         urlInput.value = cleanURL(urlStored);
 
         //Scrolls input to the end of line on mouse click               
-        urlInput.addEventListener('click', () => {
+        urlInput.addEventListener('click', (e) => {
+          if(e.detail == 1){ // If 1 click only select and scroll to end of text
           urlInput.focus();
           urlInput.scrollLeft = urlInput.scrollWidth;
           urlInput.setSelectionRange(urlInput.value.length, urlInput.value.length);
+          }
         });
 
         const saveBtn = document.createElement('button');

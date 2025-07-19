@@ -116,7 +116,6 @@ h2 {
 }
 #search-input.placeholder {
 color: #666;
-border: 3px solid var(--theme-color);
 }
 
 #search-input::after {
