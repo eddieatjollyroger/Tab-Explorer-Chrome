@@ -26,10 +26,11 @@ function cycleTheme() {
 
 
 const input = document.getElementById("search-input");
-let placeholderText = "PRESS / TO SEARCH YOUR TABS AND THE WEB";
-let placeholderIndex = 0;
-let placeholderInterval;
+let placeholder = "PRESS / TO SEARCH YOUR TABS AND THE WEB";
+let index = 0;
+let typingInterval;
 let isTyping = false;
+
 
 
 chrome.tabs.onUpdated.addListener(function (tabID, changeinfo, tab) {
@@ -663,45 +664,47 @@ function loadFavicon(url) {
 }
 
 
-function startPlaceholderTyping() {
-  if (input.textContent.trim() !== "" || document.activeElement === input) return;
+function typePlaceholder() {
+  if (isTyping || input.textContent.trim() !== "" || document.activeElement === input) return;
 
   isTyping = true;
   input.classList.add("placeholder");
 
-  placeholderInterval = setInterval(() => {
-    if (placeholderIndex < placeholderText.length) {
-      input.textContent += placeholderText.charAt(placeholderIndex);
-      placeholderIndex++;
-    } else {
-      clearInterval(placeholderInterval);
+  typingInterval = setInterval(() => {
+    input.textContent += placeholder[index++];
+    if (index >= placeholder.length) {
+      clearInterval(typingInterval);
+      isTyping = false;
+
       setTimeout(() => {
-        input.textContent = "";
-        placeholderIndex = 0;
-        startPlaceholderTyping();
-      }, 7500);
+        if (
+          document.activeElement !== input &&
+          input.textContent.trim() === placeholder
+        ) {
+          input.textContent = "";
+          index = 0;
+          typePlaceholder();
+        }
+      }, 3000);
     }
   }, 100);
 }
 
-function stopPlaceholderTyping() {
-  if (!isTyping) return;
-  clearInterval(placeholderInterval);
-  placeholderInterval = undefined; //actually clear Interval
-  input.textContent = "";
-  input.classList.remove("placeholder");
-  placeholderIndex = 0;
+function stopTyping() {
+  clearInterval(typingInterval);
   isTyping = false;
+  input.classList.remove("placeholder");
+  input.textContent = "";
+  index = 0;
 }
 
-// Start typing when not focused
-startPlaceholderTyping();
-
-input.addEventListener("focus", stopPlaceholderTyping);
+input.addEventListener("focus", stopTyping);
+input.addEventListener("input", stopTyping);
 input.addEventListener("blur", () => {
-  if (input.textContent.trim() === "") startPlaceholderTyping();
+  if (input.textContent.trim() === "") {
+    typePlaceholder();
+  }
 });
-input.addEventListener("input", () => {
-  if (input.textContent.trim() !== "") stopPlaceholderTyping();
-});
+
+typePlaceholder(); // kickstart
 
