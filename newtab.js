@@ -691,6 +691,7 @@ function typePlaceholder() {
       clearInterval(typingInterval);
       isTyping = false;
 
+
       setTimeout(() => {
         if (
           document.activeElement !== input &&
@@ -714,7 +715,6 @@ function stopTyping() {
 }
 
 input.addEventListener("focus", stopTyping);
-input.addEventListener("input", stopTyping);
 input.addEventListener("blur", () => {
   if (input.textContent.trim() === "") {
     typePlaceholder();
