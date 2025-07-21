@@ -43,7 +43,6 @@ input {
   border: 2px solid currentColor;
   font-family: 'Press Start 2P', monospace;
   font-size: 12px;
-  cursor: pointer;
   padding: 4px 8px;
 }
 
@@ -85,8 +84,7 @@ h2 {
   display: flex;
   justify-content: center;
   font-size: 82px;
-  margin-top: 1em;
-  margin-bottom: 1em;
+  padding: 1em;
   text-align: center;
   transform: translateZ(0);
   /* FIX demonic 1 pixel bug on macOS chromium */
@@ -117,7 +115,6 @@ h2 {
   font-family: inherit;
   font-size: 1em;
   padding: 0.5em;
-  margin-bottom: 2em;
   background: #111;
   border: 3px solid var(--theme-color);
   color: currentColor;
@@ -176,7 +173,6 @@ details:hover {
 summary {
   position: relative;
   display: flex;
-  cursor: pointer;
   font-size: 14px;
   margin: -0.5em;
   padding: 0.5em;
@@ -241,7 +237,6 @@ summary .favicon {
   justify-content: center;
   padding: 0.25em 0.5em;
   margin: auto;
-  cursor: pointer;
   user-select: none;
   font-size: 1.3rem;
 }
@@ -252,7 +247,6 @@ summary .favicon {
   align-items: center;
   padding: 0.25em 0.5em;
   margin-left: 1em;
-  cursor: pointer;
   user-select: none;
 }
 
@@ -266,7 +260,6 @@ summary .favicon {
   border: none;
   color: inherit;
   font: inherit;
-  cursor: pointer;
 }
 
 .pin-btn:hover {
@@ -279,7 +272,6 @@ summary .favicon {
   border: none;
   color: #f00;
   font: inherit;
-  cursor: pointer;
 }
 
 .close-btn:hover {
@@ -301,7 +293,6 @@ summary .favicon {
   font-family: 'Press Start 2P', monospace;
   font-size: 12px;
   padding: 4px 8px;
-  cursor: pointer;
   width: 160px;
   position: relative;
 }
@@ -346,8 +337,9 @@ summary .favicon {
 #quickAccess h3 {
   color: currentColor;
   margin: 0.5em 0;
+  padding-top: 2em;
   font-size: 1.3em;
-  /* font-weight: lighter;  FIX BLURRINESS ON CHROME but i kinda like it ahah*/
+  /* font-weight: lighter;  FIXES BLURRINESS ON CHROME but i kinda like it ahah*/
   text-align: center;
   align-items: center;
   gap: 0.5em;
@@ -360,7 +352,6 @@ summary .favicon {
   background: #111;
   border: 1px solid currentColor;
   color: currentColor;
-  cursor: pointer;
 }
 
 #quickAccess h3 button:hover {
@@ -376,7 +367,6 @@ summary .favicon {
   background: #111;
   border: 1px solid currentColor;
   color: currentColor;
-  cursor: pointer;
   font-size: 1.3em;
   border-radius: 0.2em;
   position: relative;
@@ -402,7 +392,6 @@ summary .favicon {
   border: none;
   color: #f00;
   font-weight: bold;
-  cursor: pointer;
 }
 
 .shortcut.edit-mode .deleteBtn {
@@ -429,7 +418,6 @@ summary .favicon {
   background: #111;
   border: 1px solid currentColor;
   color: currentColor;
-  cursor: pointer;
   border-radius: 3px;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -485,7 +473,6 @@ summary .favicon {
   border: 1px solid currentColor;
   background: #111;
   color: currentColor;
-  cursor: pointer;
 }
 
 #shortcutInputs button:hover {
@@ -499,7 +486,6 @@ summary .favicon {
   margin-left: 0.5em;
   margin-bottom: 1em;
   background: #111;
-  cursor: pointer;
 }
 
 #expandAll {
@@ -508,12 +494,16 @@ summary .favicon {
   margin-left: 0.5em;
   margin-bottom: 1em;
   background: #111;
-  cursor: pointer;
 }
 
 h3#footer {
   margin: 2EM;
   text-align: center;
+}
+
+h3#footer a{
+  color: var(--theme-color);
+  text-decoration: none;
 }
 
 @keyframes scroll {
