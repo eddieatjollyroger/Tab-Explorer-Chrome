@@ -727,6 +727,10 @@ input.addEventListener("blur", () => {
 
 typePlaceholder(); // kickstart
 
+//On load set cursors again because many els are not yet loaded
+window.onload = function () {
+  loadCursors(themeSelect.value, isOnLoad = true)
+};
 
 function loadCursors(currentColor, isOnLoad = false) {
   const rgbColors = { green: "rgb(0, 255, 0)", amber: "rgb(255, 191, 0)", blue: "rgb(0,191,255)" };
