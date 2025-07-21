@@ -11,10 +11,9 @@
 body {
   font-family: "Press Start 2P", monospace;
   background: #000;
-  color: #0f0;
   margin: 0;
   padding: 1em;
-  --main-bg-color: #0f0;
+  cursor: none;
 }
 
 body.theme-green {
@@ -34,7 +33,6 @@ body.theme-blue {
   color: #00bfff;
   --theme-color: #00bfff;
 }
-
 
 button,
 input {
@@ -377,7 +375,9 @@ summary .favicon {
 .shortcut a {
   text-decoration: none;
   color: inherit;
-  display: flex;
+  display: block;
+  margin: -5px;
+  padding: 5px; 
 }
 
 .shortcut:hover {

@@ -343,6 +343,7 @@ function loadQuickShortcuts() {
       panel.appendChild(btn);
     });
     loadCursors(themeSelect.value);
+    initShortcutDragHandlers();
   });
 }
 
@@ -614,8 +615,108 @@ function renderSavedGroups(savedGroups) {
   }
 }
 
+function initShortcutDragHandlers() {
+  let dragIndex = null;
+  let isDragging = false;
+  let ghostEl = null;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let activeBtn = null;
+  const DRAG_THRESHOLD = 3;
+
+  const buttons = document.querySelectorAll('.shortcut');
+
+  buttons.forEach((btn, index) => {
+    btn.setAttribute('draggable', 'false');
+
+    btn.addEventListener('mousedown', (e) => {
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return; //Avoid dragging behaviour on input field
+      e.preventDefault();
+
+      dragStartX = e.pageX;
+      dragStartY = e.pageY;
+      dragIndex = index;
+      activeBtn = btn;
+      isDragging = false;
+
+      const onMouseMove = (e) => {
+        const dx = Math.abs(e.pageX - dragStartX);
+        const dy = Math.abs(e.pageY - dragStartY);
+
+        if (!isDragging && (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD)) {
+          isDragging = true;
+          if (activeBtn) activeBtn.classList.add('dragging');
+
+          ghostEl = activeBtn.cloneNode(true);
+          ghostEl.style.position = 'absolute';
+          ghostEl.style.pointerEvents = 'none';
+          ghostEl.style.opacity = '0.7';
+          ghostEl.style.zIndex = '1000';
+          document.body.appendChild(ghostEl);
+        }
+
+        if (isDragging && ghostEl) {
+          ghostEl.style.left = `${e.pageX + 10}px`;
+          ghostEl.style.top = `${e.pageY + 10}px`;
+
+          // Highlight buttons
+          buttons.forEach((btn) => {
+            const rect = btn.getBoundingClientRect();
+            const inside =
+              e.clientX >= rect.left &&
+              e.clientX <= rect.right &&
+              e.clientY >= rect.top &&
+              e.clientY <= rect.bottom;
+            btn.style.border = inside ? '2px dashed var(--theme-color)' : '';
+          });
+        }
+      };
+
+      const onMouseUp = (e) => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+
+        if (isDragging) {
+          e.preventDefault();
+          if (activeBtn) activeBtn.classList.remove('dragging');
+          ghostEl?.remove();
+          ghostEl = null;
+
+          buttons.forEach((btn) => (btn.style.border = ''));
+
+          const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+          const dropBtn = dropTarget?.closest('.shortcut');
+          if (!dropBtn) return;
+
+          const toIndex = [...buttons].indexOf(dropBtn);
+          if (dragIndex === toIndex || toIndex === -1) return;
+
+          // Fetch current shortcuts again
+          chrome.storage.local.get('quickShortcuts').then(({ quickShortcuts }) => {
+            const shortcuts = quickShortcuts || [];
+            const moved = shortcuts.splice(dragIndex, 1)[0];
+            shortcuts.splice(toIndex, 0, moved);
+            chrome.storage.local.set({ quickShortcuts: shortcuts }).then(loadQuickShortcuts);
+          });
+        }
+
+        isDragging = false;
+        activeBtn = null;
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+
+    btn.addEventListener('click', (e) => {
+      if (isDragging) e.preventDefault();
+    });
+  });
+}
+
 function handleTextInput(textInput, event) {
-  if (event.detail == 1) { // If 1 click only select and scroll to end of text
+  console.log(event.view.getSelection())
+  if (event.detail == 1 && event.view.getSelection().type != "Range") { // If 1 click only select and scroll to end of text
     textInput.focus();
     textInput.scrollLeft = textInput.scrollWidth;
     textInput.setSelectionRange(textInput.value.length, textInput.value.length);
