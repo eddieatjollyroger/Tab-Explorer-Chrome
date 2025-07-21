@@ -716,7 +716,7 @@ function initShortcutDragHandlers() {
 
 function handleTextInput(textInput, event) {
   console.log(event.view.getSelection())
-  if (event.detail == 1 && event.view.getSelection().type != "Range") { // If 1 click only select and scroll to end of text
+  if (event.detail == 1 && event.view.getSelection().type != "Range" && textInput.value.length > 20) { // If 1 click only select and scroll to end of text
     textInput.focus();
     textInput.scrollLeft = textInput.scrollWidth;
     textInput.setSelectionRange(textInput.value.length, textInput.value.length);
