@@ -78,16 +78,27 @@ h2 {
 
 }
 
-#clock {
+#clock-wrapper {
   display: flex;
   justify-content: center;
-  font-size: 82px;
-  padding: 1em;
+  align-items: center;
+
+}
+
+#clock {
+  font-size: 41px;
+  padding-top: 2.5em;
+  padding-bottom: 2.5em;
   text-align: center;
-  transform: translateZ(0);
-  /* FIX demonic 1 pixel bug on macOS chromium */
-  will-change: transform;
-  /* FIX demonic 1 pixel bug on macOS chromium */
+
+  /* Scale trick */
+  transform: scale(2);
+  transform-origin: center;
+  display: inline-block;
+
+  /* Optional: prevent blurry scaling */
+  image-rendering: pixelated;
+  z-index: -1;
 }
 
 #button-grid {
