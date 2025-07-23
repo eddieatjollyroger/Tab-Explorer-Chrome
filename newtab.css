@@ -194,7 +194,7 @@ summary::-webkit-details-marker {
 
 .marker {
   position: absolute;
-  top: 0.5em;
+  top: 0.6em;
   right: 0.5em;
   width: 0;
   height: 0;
@@ -212,7 +212,7 @@ details[open] summary .marker {
   border-top: none;
   border-bottom: 10px solid var(--theme-color);
   /* triangle down */
-  top: auto;
+  top: 0.5em;
 }
 
 @keyframes pulse {
@@ -231,6 +231,8 @@ details[open] summary .marker {
 
 summary .favicon {
   image-rendering: pixelated;
+  position: relative;
+  top: -0.1em;
   margin-right: 0.5em;
   width: 16px;
   height: 16px;
@@ -513,7 +515,7 @@ summary .favicon {
 }
 
 h3#footer {
-  margin: 2EM;
+  margin-top: 3rem;
   text-align: center;
 }
 
