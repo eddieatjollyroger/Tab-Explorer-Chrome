@@ -33,6 +33,7 @@ function createInlineEdit(btn, s, shortcuts, loadQuickShortcuts) {
   saveBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
+    console.log('Saving shortcut:', s);
     s.label = labelInput.value.trim();
     s.url = urlInput.value.trim() ? prependHttps(urlInput.value.trim()) : urlInput.value.trim();
     updateShortcut(s, shortcuts, loadQuickShortcuts);
@@ -117,8 +118,8 @@ function updateShortcut(shortcut, shortcuts, loadQuickShortcuts) {
   loadingFavIcon.then((img) => {
     if (img.naturalHeight == 16) {
       shortcut.favIconUrl = '/favicongif.gif';
-      chrome.storage.local.set({ quickShortcuts: shortcuts }).then(loadQuickShortcuts);
     }
+   chrome.storage.local.set({ quickShortcuts: shortcuts }).then(loadQuickShortcuts);
   });
 }
 
