@@ -34,6 +34,21 @@ body.theme-blue {
   --theme-color: #00bfff;
 }
 
+body.theme-green,
+body.theme-amber,
+body.theme-blue {
+  animation: crtGlow 0.5s ease-in-out;
+}
+
+@keyframes crtGlow {
+  0% {
+    filter: brightness(0.2) blur(2px);
+  }
+  100% {
+    filter: brightness(1) blur(0);
+  }
+}
+
 button,
 input {
   background: #111;
@@ -442,6 +457,8 @@ summary .favicon {
   justify-content: center;
   margin-bottom: 3px;
   font-family: 'Press Start 2P', monospace;
+  margin-left: 8rem;
+  margin-right: 8rem;
 }
 
 .shortcut-btn {
@@ -553,6 +570,40 @@ h3#footer a{
 
   100% {
     background-position-y: 4px;
+  }
+}
+.crt-startup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 9999;
+  animation: crtStartupAnim 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes crtStartupAnim {
+  0% {
+    background: #000;
+    opacity: 1;
+  }
+  10% {
+    background: #000;
+  }
+  20% {
+    background: #000;
+  }
+  50% {
+    background: #000;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    display: none;
   }
 }
 

@@ -96,9 +96,16 @@ export function initTheme() {
     }
   });
 
-  window.onload = function () {
-    loadCursors(themeSelect.value, true);
-  };
+window.onload = function () {
+  loadCursors(themeSelect.value, true);
+
+  const startupEl = document.getElementById('crtStartup');
+  if (startupEl) {
+    setTimeout(() => {
+      startupEl.remove(); // Clean up after animation
+    }, 500); // Match duration of animation
+  }
+};
 }
 
 function formatSelectValues(str) {
