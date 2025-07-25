@@ -1,7 +1,16 @@
 chrome.runtime.onInstalled.addListener((reason) => {
   chrome.storage.local.get('quickShortcuts').then(({ quickShortcuts }) => {
     let shortcuts = quickShortcuts || [];
-    if (shortcuts.length > 0) return;
+    if (shortcuts.length > 0) { 
+      shortcuts.forEach((shortcut) => {
+        if (!shortcut.favIconUrl) {
+          shortcut.favIconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(shortcut.url)}`;
+        }
+      });
+      chrome.storage.local.set({ quickShortcuts: shortcuts });
+    }
+    else
+      {
     chrome.topSites.get().then(data => {
 
       if (data.length === 0) return;
@@ -24,6 +33,7 @@ chrome.runtime.onInstalled.addListener((reason) => {
         })
       }
       chrome.storage.local.set({ quickShortcuts: shortcuts });
-    })
+    });
+  }
   });
 });

@@ -96,18 +96,19 @@ export function initTheme() {
     }
   });
 
-window.onload = function () {
-  loadCursors(themeSelect.value, true);
-
-  const startupEl = document.getElementById('crtStartup');
-  if (startupEl) {
-    setTimeout(() => {
-      startupEl.remove(); // Clean up after animation
-    }, 500); // Match duration of animation
-  }
-};
+document.addEventListener("DOMContentLoaded", loadCursorsBootAnimation);
 }
 
+function loadCursorsBootAnimation() {
+  loadCursors(themeSelect.value, true);
+
+  const startupEl = document.getElementById('crtBoot');
+  if (startupEl) {
+      setTimeout(() => {
+        startupEl.remove(); // Clean up after animation
+      }, 250); // Match duration of animation
+    }
+}
 function formatSelectValues(str) {
   switch (str) {
     case 'green': return 'CRT Green';
