@@ -5,7 +5,7 @@
 }
 
 :root {
-  --theme-color: #000;
+  --theme-color: var(--theme-color, #000);
 }
 
 body {
@@ -37,7 +37,7 @@ body.theme-blue {
 body.theme-green,
 body.theme-amber,
 body.theme-blue {
-  animation: crtGlow 0.5s ease-in-out;
+  animation: crtGlow 0.25s ease-in-out;
 }
 
 @keyframes crtGlow {

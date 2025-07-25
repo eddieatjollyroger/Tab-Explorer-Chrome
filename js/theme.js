@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", loadCursorsBootAnimation);
 function loadCursorsBootAnimation() {
   loadCursors(themeSelect.value, true);
 
-  const startupEl = document.getElementById('crtBoot');
+  const startupEl = document.getElementById('crtStartup');
   if (startupEl) {
       setTimeout(() => {
         startupEl.remove(); // Clean up after animation
