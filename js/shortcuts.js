@@ -3,7 +3,7 @@ import { loadCursors } from './cursors.js';
 
 let isEditMode = false;
 
-function createDeleteButton(shortcuts, index, loadQuickShortcuts) {
+function createDeleteButton(shortcuts, index) {
   const delBtn = document.createElement('button');
   delBtn.textContent = 'X';
   delBtn.className = 'deleteBtn';
@@ -15,7 +15,7 @@ function createDeleteButton(shortcuts, index, loadQuickShortcuts) {
   return delBtn;
 }
 
-function createInlineEdit(btn, s, shortcuts, loadQuickShortcuts) {
+function createInlineEdit(btn, s, shortcuts) {
   btn.innerHTML = '';
   btn.classList.add('inline-edit');
   btn.draggable = false;
@@ -33,10 +33,9 @@ function createInlineEdit(btn, s, shortcuts, loadQuickShortcuts) {
   saveBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Saving shortcut:', s);
     s.label = labelInput.value.trim();
     s.url = urlInput.value.trim() ? prependHttps(urlInput.value.trim()) : urlInput.value.trim();
-    updateShortcut(s, shortcuts, loadQuickShortcuts);
+    updateShortcut(s, shortcuts);
   });
   btn.appendChild(labelInput);
   btn.appendChild(urlInput);
@@ -44,7 +43,7 @@ function createInlineEdit(btn, s, shortcuts, loadQuickShortcuts) {
   loadCursors(document.getElementById('themeSelect').value);
 }
 
-function createShortcutButton(s, index, shortcuts, loadQuickShortcuts) {
+function createShortcutButton(s, index, shortcuts) {
   const btn = document.createElement('div');
   btn.className = 'shortcut';
   if (isEditMode) btn.classList.add('edit-mode');
@@ -59,7 +58,7 @@ function createShortcutButton(s, index, shortcuts, loadQuickShortcuts) {
   labelSpan.textContent = s.label;
   link.appendChild(labelSpan);
   btn.appendChild(link);
-  btn.appendChild(createDeleteButton(shortcuts, index, loadQuickShortcuts));
+  btn.appendChild(createDeleteButton(shortcuts, index));
   btn.addEventListener('click', (e) => {
     if (btn.classList.contains('edit-mode')) e.preventDefault();
   });
@@ -67,7 +66,7 @@ function createShortcutButton(s, index, shortcuts, loadQuickShortcuts) {
     if (!btn.classList.contains('edit-mode') || btn.classList.contains('inline-edit')) return;
     if (Array.from(btn.parentNode.childNodes).some(e => e.classList.contains('inline-edit'))) return;
     e.stopPropagation();
-    createInlineEdit(btn, s, shortcuts, loadQuickShortcuts);
+    createInlineEdit(btn, s, shortcuts);
   });
   return btn;
 }
@@ -78,7 +77,7 @@ function loadQuickShortcuts() {
     const panel = document.getElementById('shortcutPanel');
     panel.innerHTML = '';
     shortcuts.forEach((s, index) => {
-      panel.appendChild(createShortcutButton(s, index, shortcuts, loadQuickShortcuts));
+      panel.appendChild(createShortcutButton(s, index, shortcuts));
     });
     loadCursors(document.getElementById('themeSelect').value);
     initShortcutDragHandlers();
@@ -111,7 +110,7 @@ function addShortcutFromInputs(label, url) {
   });
 }
 
-function updateShortcut(shortcut, shortcuts, loadQuickShortcuts) {
+function updateShortcut(shortcut, shortcuts) {
   if (!shortcut.label || !shortcut.url) return alert('Please insert both a label and a URL.');
   const loadingFavIcon = loadFavicon(shortcut.url);
   shortcut.favIconUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(shortcut.url)}`;
