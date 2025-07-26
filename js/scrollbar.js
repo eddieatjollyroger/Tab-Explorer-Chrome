@@ -25,6 +25,9 @@ function updateThumbs() {
   vTrack.classList.toggle('visible', vNeeded);
   vTrack.classList.toggle('hidden', !vNeeded);
 
+  if(vNeeded) content.style.paddingRight = '15px'; //Adjusting content when bar is shown
+  if(!vNeeded && content.style.paddingRight == '15px') content.style.paddingRight = '0px';
+
   // --- Horizontal Scrollbar ---
   const hRatio = clientWidth / scrollWidth;
   const hLeft = scrollLeft * hRatio;
@@ -33,10 +36,6 @@ function updateThumbs() {
   const effectiveWidth = document.body.offsetWidth; // includes padding/borders
   const availableScrollWidth = content.clientWidth; // excludes scrollbar
   const verticalBarWidth = effectiveWidth - availableScrollWidth; //size of custom vertical bar
-
-  console.log(effectiveWidth)
-  console.log(availableScrollWidth)
-  console.log(verticalBarWidth)
 
   let hThumbWidth = Math.max(clientWidth * hRatio, 20);
   if (vNeeded) {
@@ -149,6 +148,17 @@ function updateThumbs() {
 
   content.addEventListener('scroll', updateThumbs);
   window.addEventListener('resize', updateThumbs);
+
+// Trackpad and zoom support
+content.addEventListener('wheel', () => {
+  requestAnimationFrame(updateThumbs);
+}, { passive: true });
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    requestAnimationFrame(updateThumbs);
+  });
+}
 
   updateThumbs();
   return updateThumbs;
