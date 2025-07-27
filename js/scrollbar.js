@@ -25,8 +25,7 @@ function updateThumbs() {
   vTrack.classList.toggle('visible', vNeeded);
   vTrack.classList.toggle('hidden', !vNeeded);
 
-  if(vNeeded) content.style.paddingRight = '15px'; //Adjusting content when bar is shown
-  if(!vNeeded && content.style.paddingRight == '15px') content.style.paddingRight = '0px';
+  content.style.paddingRight = vNeeded ? '15px' : '0px'; // Account for scrollbar
 
   // --- Horizontal Scrollbar ---
   const hRatio = clientWidth / scrollWidth;
